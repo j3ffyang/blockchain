@@ -4,6 +4,6 @@
 - Reference information are recorded in each document respectively
 
 ## BlockChain
-[Private BlockChain on Ethereum](./docs/20180305_eth.md)
-[Hyperledger Customized Configuration for Production](./docs/20180306_hl_sample.md)
-[BlockChain- Explorer Integration with an existing Hyperledger Fabric](./docs/20180322_bc_explorer.md)
+- [Private BlockChain on Ethereum](./docs/20180305_eth.md)
+- [Hyperledger Customized Configuration for Production](./docs/20180306_hl_sample.md)
+- [BlockChain- Explorer Integration with an existing Hyperledger Fabric](./docs/20180322_bc_explorer.md)
