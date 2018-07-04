@@ -30,6 +30,8 @@
 #### Product Description
 - Logic of business and technical in general
 
+#### Architectural Design
+
 #### Account and Identification
 - Key Management
 - PGP
@@ -50,6 +52,8 @@
 #### Data Schema
 - json Standardization
 - Compression for transformation performance
+
+#### Scripting
 
 #### Token System
 
