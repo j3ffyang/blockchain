@@ -1,4 +1,4 @@
-# Blockchain Explorer
+# BlockChain Explorer
 
 Reference: [https://github.com/hyperledger/blockchain-explorer](https://github.com/hyperledger/blockchain-explorer)
 
@@ -8,7 +8,6 @@ Reference: [https://github.com/hyperledger/blockchain-explorer](https://github.c
 
   ```shell
   git clone https://github.com/hyperledger/blockchain-explorer.git
-  cp ~/blockchain-explorer/db/fabricexplorer.sql /path/to/mysql_vol
   ```
 
 > You need to create ```/path/to/mysql_vol``` manually first
@@ -17,15 +16,28 @@ Reference: [https://github.com/hyperledger/blockchain-explorer](https://github.c
 
   ```shell
   docker run --name mysql-bcexplorer -p 3306:3306 -v /path/to/mysql_vol:/var/lib/mysql \
-    -e MYSQL_ROOT_PASSWORD=mysecret -d mysql
+    -e MYSQL_ROOT_PASSWORD=mysecret -d mysql:5.7
+  ```
+
+  or without persistent data volume
+
+  ```shell
+  docker run --name mysql-bcexplorer -p 3306:3306 \
+    -e MYSQL_ROOT_PASSWORD=mysecret -d mysql:5.7
+  ```
+
+- Copy SQL script into docker
+
+  ```
+  docker cp ~/work/blockchain-explorer/db/fabricexplorer.sql \
+    mysql-bcexplorer:/var/lib/mysql/
   ```
 
 - Initialize Database
 
   ```shell
-  docker exec -it mysql-bcexplorer bash
-  cd /var/lib/mysql
-  mysql -u root -p < ./fabricexplorer.sql
+  docker exec -it mysql-bcexplorer /bin/bash -c \
+    "mysql -uroot -pmysecret -hlocalhost < /var/lib/mysql/fabricexplorer.sql"
   ```
 
 - Startup Fabric network. Then modify configuration of ```config.json``` accordingly
@@ -74,13 +86,6 @@ Reference: [https://github.com/hyperledger/blockchain-explorer](https://github.c
   ```shell
   cd blockchain_explorer
   npm install
-  ./start.sh
-  ```
-  Or
-
-  ```
-  cd blockchain_explorer
-  npm install
   node main.js
   ```
 
@@ -88,19 +93,19 @@ Reference: [https://github.com/hyperledger/blockchain-explorer](https://github.c
 
 - List container_id of images from ```hyperledger``` and ```dev-peer```
 
-  ```
+  ```shell
   docker ps -a | grep 'hyperledger\ | dev-peer' | cut -f1 -d" "
   ```
 
     Or
 
-  ```
+  ```shell
   docker ps -a | awk '($2 ~ /hyperledger/) || ($2 ~ /dev-peer/) {print $1}'
   ```
 
 - Disable __peer_tls__, edit ```~/fabric-samples/basic-network/docker-compose.yml```
 
-```
+```shell
 orderer.example.com:
   container_name: orderer.example.com
   image: hyperledger/fabric-orderer
