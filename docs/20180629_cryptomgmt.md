@@ -26,6 +26,7 @@
 - History
 - Philosophy
 - Open source software
+- Value proposition 
 
 #### Product Description
 - Logic of business and technical in general
