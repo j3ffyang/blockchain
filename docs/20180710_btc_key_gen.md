@@ -60,4 +60,4 @@ Then the address is **1**33GNRFw1NiwXy3HXTDemx8UCUqanxJgUK
 
 - Reference from Google Images
 
-<img src="../imgs/20170526_generatebitcoinaddr.png">
+<img src="../imgs/20170526_generatebitcoinaddr.png" width="650px">
