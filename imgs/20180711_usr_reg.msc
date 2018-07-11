@@ -1,0 +1,13 @@
+msc{
+  appuser, bizapp, blockchain, controller, queue;
+
+  appuser =>> bizapp [label="1.request"];
+  bizapp =>> bizapp [label="2.registered in db"];
+  appuser << bizapp [label="3.notif reg finished"];
+  bizapp =>> blockchain [label="4.bizapp send req to blockchain[1]"];
+  blockchain =>> blockchain [label="5.account init"];
+  controller >> blockchain [label="6.listen to user reg event[2]"];
+  controller =>> queue [label="7.send event into queue"];
+  queue >> bizapp [label="8.push event to subscriber"];
+  bizapp >> appuser [label="9.notif account initialized"];
+}

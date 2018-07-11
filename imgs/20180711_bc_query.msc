@@ -1,0 +1,19 @@
+msc{
+
+  hscale = "1";
+
+  appuser, bizapp, fabric_svc, ledger;
+
+  appuser =>> bizapp [label="1.submit content"];
+  bizapp =>> bizapp [label="2.insert into db; generate content_id"];
+  bizapp >> appuser [label="3.return"];
+  --- [label="common bizapp logic"];
+  bizapp =>> fabric_svc [label="4.invoke chaincode"];
+  fabric_svc =>> fabric_svc [label="5.hashing"];
+  fabric_svc =>> ledger [label="6.insert hash into chain w/ content_id=key"];
+  appuser =>> bizapp [label="7.raise request to verify content"];
+  bizapp =>> bizapp [label="8.through content_id in db"];
+  bizapp =>> fabric_svc [label="9.tx_info by content_id"];
+  fabric_svc >> bizapp [label="10.return"];
+  bizapp >> appuser [label="11.return"];
+}
