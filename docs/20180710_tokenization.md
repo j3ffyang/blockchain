@@ -71,12 +71,12 @@ block generation |
 
 > Architecture Draft credited to Alex
 
-<img src="./imgs/20180711_token_sys.png">
+<img src="../imgs/20180711_token_sys.png">
 
 ## Data Flow
 
 - User Registration
-<img src="./imgs/20180711_usr_reg.png">
+<img src="../imgs/20180711_usr_reg.png">
 
 - Query
-<img src="./imgs/20180711_bc_query.png">
+<img src="../imgs/20180711_bc_query.png">
