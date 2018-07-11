@@ -8,3 +8,4 @@
 - [Hyperledger Customized Configuration for Production](./docs/20180306_hl_sample.md)
 - [BlockChain- Explorer Integration with an existing Hyperledger Fabric](./docs/20180322_bc_explorer.md)
 - [Bitcoin Keygen](./docs/20180710_btc_key_gen.md)
+- [A draft token system design](./docs/20180710_tokenization.md)
