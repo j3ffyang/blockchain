@@ -10,3 +10,4 @@
 - [Bitcoin Keygen](./docs/20180710_btc_key_gen.md)
 - [A draft token system design](./docs/20180710_tokenization.md)
 - [GnuPG Tutorial](./docs/20180717_gnupg.md)
+- [A Distributed Hyperledger Fabric Cluster with Persistent Ledger](./docs/20180424_bc_prod.md)
