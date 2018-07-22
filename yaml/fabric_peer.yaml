@@ -1,0 +1,97 @@
+version: "3.3"
+
+services:
+  org1-peer0:
+    image: hyperledger/fabric-peer
+    networks:
+      - outside
+    hostname: "peer0.org1.daotech.io"
+    volumes:
+      - /data/fabric/crypto-config/peerOrganizations/org1.daotech.io/peers/peer0.org1.daotech.io/msp:/etc/hyperledger/fabric/msp
+      - /data/fabric/crypto-config/peerOrganizations/org1.daotech.io/peers/peer0.org1.daotech.io/tls:/etc/hyperledger/fabric/tls
+      - /var/run:/host/var/run
+      - /data/fabric/org1/peer0:/var/hyperledger/production
+    environment:
+      CORE_LOGGING_LEVEL: debug
+      CORE_PEER_ADDRESS:peer0.org1.daotech.io: 7051
+      CORE_PEER_GOSSIP_EXTERNALENDPOINT:10.0.1.198: 7051
+      CORE_VM_DOCKER_HOSTCONFIG_EXTRAHOSTS:peer0.org1.daotech.io: 10.0.1.198
+      CORE_PEER_GOSSIP_ORGLEADER: "false"
+      CORE_PEER_GOSSIP_USELEADERELECTION: "true"
+      CORE_PEER_ID: peer0.org1.daotech.io
+      CORE_PEER_LOCALMSPID: Org1MSP
+      CORE_PEER_PROFILE_ENABLED: "true"
+      CORE_PEER_TLS_CERT_FILE: /etc/hyperledger/fabric/tls/server.crt
+      CORE_PEER_TLS_ENABLED: "true"
+      CORE_PEER_TLS_KEY_FILE: /etc/hyperledger/fabric/tls/server.key
+      CORE_PEER_TLS_ROOTCERT_FILE: /etc/hyperledger/fabric/tls/ca.crt
+      CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE: host
+      CORE_VM_ENDPOINT: unix:///host/var/run/docker.sock
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: ["peer", "node", "start"]
+    depends_on:
+      - zookeeper0
+      - zookeeper1
+      - zookeeper2
+      - kafka0
+      - kafka1
+      - kafka2
+      - kafka3
+      - orderer0
+      - orderer1
+      - orderer2
+    deploy:
+      placement:
+        constraints: [node.labels.host==3]
+      replicas: 1
+
+
+  org3-peer0:
+    image: hyperledger/fabric-peer
+    networks:
+      - outside
+    hostname: "peer0.org3.daotech.io"
+    volumes:
+      - /data/fabric/crypto-config/peerOrganizations/org1.daotech.io/peers/peer0.org1.daotech.io/msp:/etc/hyperledger/fabric/msp
+      - /data/fabric/crypto-config/peerOrganizations/org1.daotech.io/peers/peer0.org1.daotech.io/tls:/etc/hyperledger/fabric/tls
+      - /var/run:/host/var/run
+      - /data/fabric/org1/peer0:/var/hyperledger/production
+    environment:
+      CORE_LOGGING_LEVEL: debug
+      CORE_PEER_ADDRESS:peer0.org1.daotech.io: 7051
+      CORE_PEER_GOSSIP_EXTERNALENDPOINT:10.0.1.198: 7051
+      CORE_VM_DOCKER_HOSTCONFIG_EXTRAHOSTS:peer0.org1.daotech.io: 10.0.1.198
+      CORE_PEER_GOSSIP_ORGLEADER: "false"
+      CORE_PEER_GOSSIP_USELEADERELECTION: "true"
+      CORE_PEER_ID: peer0.org1.daotech.io
+      CORE_PEER_LOCALMSPID: Org1MSP
+      CORE_PEER_PROFILE_ENABLED: "true"
+      CORE_PEER_TLS_CERT_FILE: /etc/hyperledger/fabric/tls/server.crt
+      CORE_PEER_TLS_ENABLED: "true"
+      CORE_PEER_TLS_KEY_FILE: /etc/hyperledger/fabric/tls/server.key
+      CORE_PEER_TLS_ROOTCERT_FILE: /etc/hyperledger/fabric/tls/ca.crt
+      CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE: host
+      CORE_VM_ENDPOINT: unix:///host/var/run/docker.sock
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: ["peer", "node", "start"]
+    depends_on:
+      - zookeeper0
+      - zookeeper1
+      - zookeeper2
+      - kafka0
+      - kafka1
+      - kafka2
+      - kafka3
+      - orderer0
+      - orderer1
+      - orderer2
+    deploy:
+      placement:
+        constraints: [node.labels.host==3]
+      replicas: 1
+
+
+networks:
+  outside:
+    external:
+      name: "host"

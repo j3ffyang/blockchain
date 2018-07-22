@@ -1,0 +1,56 @@
+version: "3.3"
+
+services:
+  zookeeper0:
+    image: hyperledger/fabric-zookeeper
+    networks:
+      - outside
+    hostname: "zookeeper0"
+    volumes:
+      - /data/fabric/zookeeper0:/data
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_SERVERS: 'server.1=zookeeper0:2888:2888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888'
+    deploy:
+      placement:
+        constraints: [node.labels.host==3]
+      replicas: 1
+
+  zookeeper1:
+    image: hyperledger/fabric-zookeeper
+    networks:
+      - outside
+    hostname: "zookeeper1"
+    volumes:
+      - /data/fabric/zookeeper1:/data
+    environment:
+      ZOO_MY_ID: 2
+      ZOO_SERVERS: 'server.1=zookeeper0:2888:2888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888'
+    depends_on:
+      - zookeeper0
+    deploy:
+      placement:
+        constraints: [node.labels.host==4]
+      replicas: 1
+
+  zookeeper2:
+    image: hyperledger/fabric-zookeeper
+    networks:
+      - outside
+    hostname: "zookeeper2"
+    volumes:
+      - /data/fabric/zookeeper2:/data
+    environment:
+      ZOO_MY_ID: 3
+      ZOO_SERVERS: 'server.1=zookeeper0:2888:2888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888'
+    depends_on:
+      - zookeeper1
+    deploy:
+      placement:
+        constraints: [node.labels.host==6]
+      replicas: 1
+
+networks:
+  outside:
+    external:
+      name: "host"

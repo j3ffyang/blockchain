@@ -1,0 +1,118 @@
+version: "3.3"
+
+services:
+  orderer0:
+    image: hyperledger/fabric-orderer
+    networks:
+      - outside
+    hostname: "orderer0.daotech.io"
+    volumes:
+      - /data/fabric/crypto-config/ordererOrganizations/daotech.io/orderers/orderer0.daotech.io/msp:/var/hyperledger/orderer/msp
+      - /data/fabric/channel-artifacts/daotechio-genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - /data/fabric/crypto-config/ordererOrganizations/daotech.io/orderers/orderer0.daotech.io/tls:/var/hyperledger/orderer/tls
+      - /data/fabric/orderer0:/var/hyperledger/production
+    environment:
+      ORDERER_GENERAL_LOGLEVEL: debug
+      ORDERER_GENERAL_LISTENADDRESS: 0.0.0.0
+      ORDERER_GENERAL_GENESISMETHOD: file
+      ORDERER_GENERAL_GENESISFILE: /var/hyperledger/orderer/orderer.genesis.block
+      ORDERER_GENERAL_LOCALMSPID: OrdererMSP
+      ORDERER_GENERAL_LOCALMSPDIR: /var/hyperledger/orderer/msp
+      ORDERER_GENERAL_TLS_ENABLED: 'true'
+      ORDERER_GENERAL_TLS_PRIVATEKEY: /var/hyperledger/orderer/tls/server.key
+      ORDERER_GENERAL_TLS_CERTIFICATE: /var/hyperledger/orderer/tls/server.crt
+      ORDERER_GENERAL_TLS_ROOTCAS: '[/var/hyperledger/orderer/tls/ca.crt]'
+      ORDERER_KAFKA_BROKERS: '[kafka0:9092,kafka1:9092,kafka2:9092,kafka3:9092]'
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: ["orderer"]
+    depends_on:
+      - zookeeper0
+      - zookeeper1
+      - zookeeper2
+      - kafka0
+      - kafka1
+      - kafka2
+      - kafka3
+    deploy:
+      placement:
+        constraints: [node.labels.host==3]
+      replicas: 1
+
+  orderer1:
+    image: hyperledger/fabric-orderer
+    networks:
+      - outside
+    hostname: "orderer1.daotech.io"
+    volumes:
+      - /data/fabric/crypto-config/ordererOrganizations/daotech.io/orderers/orderer1.daotech.io/msp:/var/hyperledger/orderer/msp
+      - /data/fabric/channel-artifacts/daotechio-genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - /data/fabric/crypto-config/ordererOrganizations/daotech.io/orderers/orderer1.daotech.io/tls:/var/hyperledger/orderer/tls
+      - /data/fabric/orderer1:/var/hyperledger/production
+    environment:
+      ORDERER_GENERAL_LOGLEVEL: debug
+      ORDERER_GENERAL_LISTENADDRESS: 0.0.0.0
+      ORDERER_GENERAL_GENESISMETHOD: file
+      ORDERER_GENERAL_GENESISFILE: /var/hyperledger/orderer/orderer.genesis.block
+      ORDERER_GENERAL_LOCALMSPID: OrdererMSP
+      ORDERER_GENERAL_LOCALMSPDIR: /var/hyperledger/orderer/msp
+      ORDERER_GENERAL_TLS_ENABLED: 'true'
+      ORDERER_GENERAL_TLS_PRIVATEKEY: /var/hyperledger/orderer/tls/server.key
+      ORDERER_GENERAL_TLS_CERTIFICATE: /var/hyperledger/orderer/tls/server.crt
+      ORDERER_GENERAL_TLS_ROOTCAS: '[/var/hyperledger/orderer/tls/ca.crt]'
+      ORDERER_KAFKA_BROKERS: '[kafka0:9092,kafka1:9092,kafka2:9092,kafka3:9092]'
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: ["orderer"]
+    depends_on:
+      - zookeeper0
+      - zookeeper1
+      - zookeeper2
+      - kafka0
+      - kafka1
+      - kafka2
+      - kafka3
+    deploy:
+      placement:
+        constraints: [node.labels.host==4]
+      replicas: 1
+
+  orderer2:
+    image: hyperledger/fabric-orderer
+    networks:
+      - outside
+    hostname: "orderer2.daotech.io"
+    volumes:
+      - /data/fabric/crypto-config/ordererOrganizations/daotech.io/orderers/orderer2.daotech.io/msp:/var/hyperledger/orderer/msp
+      - /data/fabric/channel-artifacts/daotechio-genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - /data/fabric/crypto-config/ordererOrganizations/daotech.io/orderers/orderer2.daotech.io/tls:/var/hyperledger/orderer/tls
+      - /data/fabric/orderer2:/var/hyperledger/production
+    environment:
+      ORDERER_GENERAL_LOGLEVEL: debug
+      ORDERER_GENERAL_LISTENADDRESS: 0.0.0.0
+      ORDERER_GENERAL_GENESISMETHOD: file
+      ORDERER_GENERAL_GENESISFILE: /var/hyperledger/orderer/orderer.genesis.block
+      ORDERER_GENERAL_LOCALMSPID: OrdererMSP
+      ORDERER_GENERAL_LOCALMSPDIR: /var/hyperledger/orderer/msp
+      ORDERER_GENERAL_TLS_ENABLED: 'true'
+      ORDERER_GENERAL_TLS_PRIVATEKEY: /var/hyperledger/orderer/tls/server.key
+      ORDERER_GENERAL_TLS_CERTIFICATE: /var/hyperledger/orderer/tls/server.crt
+      ORDERER_GENERAL_TLS_ROOTCAS: '[/var/hyperledger/orderer/tls/ca.crt]'
+      ORDERER_KAFKA_BROKERS: '[kafka0:9092,kafka1:9092,kafka2:9092,kafka3:9092]'
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: ["orderer"]
+    depends_on:
+      - zookeeper0
+      - zookeeper1
+      - zookeeper2
+      - kafka0
+      - kafka1
+      - kafka2
+      - kafka3
+    deploy:
+      placement:
+        constraints: [node.labels.host==5]
+      replicas: 1
+
+networks:
+  outside:
+    external:
+      name: "host"

@@ -1,0 +1,111 @@
+version: "3.3"
+
+services:
+  kafka0:
+    image: hyperledger/fabric-kafka:x86_64-0.4.6
+    networks:
+      - outside
+    hostname: "kafka0"
+    volumes:
+      - /data/fabric/kafka0/logs:/opt/kafka/logs
+      - /data/fabric/kafka0/tmp-logs:/tmp
+    environment:
+      KAFKA_BROKER_ID: 0
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_LOG_RETENTION_MS: -1
+      KAFKA_MESSAGE_MAX_BYTES: 1048576
+      KAFKA_MIN_INSYNC_REPLICAS: 2
+      KAFKA_REPLICA_FETCH_MAX_BYTES: 1048576
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper0:2181,zookeeper1:2181,zookeeper2:2181'
+      KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE: "false"
+    depends_on:
+      - zookeeper0
+      - zookeeper1
+      - zookeeper2
+    deploy:
+      placement:
+        constraints: [node.labels.host==3]
+      replicas: 1
+
+  kafka1:
+    image: hyperledger/fabric-kafka:x86_64-0.4.6
+    networks:
+      - outside
+    hostname: "kafka1"
+    volumes:
+      - /data/fabric/kafka1/logs:/opt/kafka/logs
+      - /data/fabric/kafka1/tmp-logs:/tmp
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_LOG_RETENTION_MS: -1
+      KAFKA_MESSAGE_MAX_BYTES: 1048576
+      KAFKA_MIN_INSYNC_REPLICAS: 2
+      KAFKA_REPLICA_FETCH_MAX_BYTES: 1048576
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper0:2181,zookeeper1:2181,zookeeper2:2181'
+      KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE: "false"
+    depends_on:
+      - zookeeper0
+      - zookeeper1
+      - zookeeper2
+    deploy:
+      placement:
+        constraints: [node.labels.host==4]
+      replicas: 1
+
+  kafka2:
+    image: hyperledger/fabric-kafka:x86_64-0.4.6
+    networks:
+      - outside
+    hostname: "kafka2"
+    volumes:
+      - /data/fabric/kafka2/logs:/opt/kafka/logs
+      - /data/fabric/kafka2/tmp-logs:/tmp
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_LOG_RETENTION_MS: -1
+      KAFKA_MESSAGE_MAX_BYTES: 1048576
+      KAFKA_MIN_INSYNC_REPLICAS: 2
+      KAFKA_REPLICA_FETCH_MAX_BYTES: 1048576
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper0:2181,zookeeper1:2181,zookeeper2:2181'
+      KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE: "false"
+    depends_on:
+      - zookeeper0
+      - zookeeper1
+      - zookeeper2
+    deploy:
+      placement:
+        constraints: [node.labels.host==5]
+      replicas: 1
+
+  kafka3:
+    image: hyperledger/fabric-kafka:x86_64-0.4.6
+    networks:
+      - outside
+    hostname: "kafka3"
+    volumes:
+      - /data/fabric/kafka3/logs:/opt/kafka/logs
+      - /data/fabric/kafka3/tmp-logs:/tmp
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_LOG_RETENTION_MS: -1
+      KAFKA_MESSAGE_MAX_BYTES: 1048576
+      KAFKA_MIN_INSYNC_REPLICAS: 2
+      KAFKA_REPLICA_FETCH_MAX_BYTES: 1048576
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper0:2181,zookeeper1:2181,zookeeper2:2181'
+      KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE: "false"
+    depends_on:
+      - zookeeper0
+      - zookeeper1
+      - zookeeper2
+    deploy:
+      placement:
+        constraints: [node.labels.host==6]
+      replicas: 1
+
+networks:
+  outside:
+    external:
+      name: "host"

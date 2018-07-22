@@ -1,0 +1,315 @@
+version: "3.3"
+
+services:
+  zookeeper0:
+    image: hyperledger/fabric-zookeeper
+    networks:
+      - outside
+    hostname: "zookeeper0"
+    volumes:
+      - /data/fabric/zookeeper0:/data
+    environment:
+      - ZOO_MY_ID:1
+      - ZOO_SERVERS:'server.1=zookeeper0:2888:2888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888'
+    deploy:
+      placement:
+        constraints: [node.labels.host==3]
+      replicas: 1
+
+  zookeeper1:
+    image: hyperledger/fabric-zookeeper
+    networks:
+      - outside
+    hostname: "zookeeper1"
+    volumes:
+      - /data/fabric/zookeeper1:/data
+    environment:
+      - ZOO_MY_ID:2
+      - ZOO_SERVERS:'server.1=zookeeper0:2888:2888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888'
+    depends_on:
+      - zookeeper0
+    deploy:
+      placement:
+        constraints: [node.labels.host==4]
+      replicas: 1
+
+  zookeeper2:
+    image: hyperledger/fabric-zookeeper
+    networks:
+      - outside
+    hostname: "zookeeper2"
+    volumes:
+      - /data/fabric/zookeeper2:/data
+    environment:
+      - ZOO_MY_ID:3
+      - ZOO_SERVERS:'server.1=zookeeper0:2888:2888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888'
+    depends_on:
+      - zookeeper1
+    deploy:
+      placement:
+        constraints: [node.labels.host==6]
+      replicas: 1
+
+  kafka0:
+    image: hyperledger/fabric-kafka:x86_64-0.4.6
+    networks:
+      - outside
+    hostname: "kafka0"
+    volumes:
+      - /data/fabric/kafka0/logs:/opt/kafka/logs
+      - /data/fabric/kafka0/tmp-logs:/tmp
+    environment:
+      - KAFKA_BROKER_ID:0
+      - KAFKA_DEFAULT_REPLICATION_FACTOR:3
+      - KAFKA_LOG_RETENTION_MS:-1
+      - KAFKA_MESSAGE_MAX_BYTES:1048576
+      - KAFKA_MIN_INSYNC_REPLICAS:2
+      - KAFKA_REPLICA_FETCH_MAX_BYTES:1048576
+      - KAFKA_ZOOKEEPER_CONNECT:'zookeeper0:2181,zookeeper1:2181,zookeeper2:2181'
+      - KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE:false
+    depends_on:
+      - zookeeper0
+      - zookeeper1
+      - zookeeper2
+    deploy:
+      placement:
+        constraints: [node.labels.host==3]
+      replicas: 1
+
+  kafka1:
+    image: hyperledger/fabric-kafka:x86_64-0.4.6
+    networks:
+      - outside
+    hostname: "kafka1"
+    volumes:
+      - /data/fabric/kafka1/logs:/opt/kafka/logs
+      - /data/fabric/kafka1/tmp-logs:/tmp
+    environment:
+      - KAFKA_BROKER_ID:1
+      - KAFKA_DEFAULT_REPLICATION_FACTOR:3
+      - KAFKA_LOG_RETENTION_MS:-1
+      - KAFKA_MESSAGE_MAX_BYTES:1048576
+      - KAFKA_MIN_INSYNC_REPLICAS:2
+      - KAFKA_REPLICA_FETCH_MAX_BYTES:1048576
+      - KAFKA_ZOOKEEPER_CONNECT:'zookeeper0:2181,zookeeper1:2181,zookeeper2:2181'
+      - KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE:false
+    depends_on:
+      - zookeeper0
+      - zookeeper1
+      - zookeeper2
+    deploy:
+      placement:
+        constraints: [node.labels.host==4]
+      replicas: 1
+
+  kafka2:
+    image: hyperledger/fabric-kafka:x86_64-0.4.6
+    networks:
+      - outside
+    hostname: "kafka2"
+    volumes:
+      - /data/fabric/kafka2/logs:/opt/kafka/logs
+      - /data/fabric/kafka2/tmp-logs:/tmp
+    environment:
+      - KAFKA_BROKER_ID:2
+      - KAFKA_DEFAULT_REPLICATION_FACTOR:3
+      - KAFKA_LOG_RETENTION_MS:-1
+      - KAFKA_MESSAGE_MAX_BYTES:1048576
+      - KAFKA_MIN_INSYNC_REPLICAS:2
+      - KAFKA_REPLICA_FETCH_MAX_BYTES:1048576
+      - KAFKA_ZOOKEEPER_CONNECT:'zookeeper0:2181,zookeeper1:2181,zookeeper2:2181'
+      - KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE:false
+    depends_on:
+      - zookeeper0
+      - zookeeper1
+      - zookeeper2
+    deploy:
+      placement:
+        constraints: [node.labels.host==5]
+      replicas: 1
+
+  kafka3:
+    image: hyperledger/fabric-kafka:x86_64-0.4.6
+    networks:
+      - outside
+    hostname: "kafka3"
+    volumes:
+      - /data/fabric/kafka3/logs:/opt/kafka/logs
+      - /data/fabric/kafka3/tmp-logs:/tmp
+    environment:
+      - KAFKA_BROKER_ID:3
+      - KAFKA_DEFAULT_REPLICATION_FACTOR:3
+      - KAFKA_LOG_RETENTION_MS:-1
+      - KAFKA_MESSAGE_MAX_BYTES:1048576
+      - KAFKA_MIN_INSYNC_REPLICAS:2
+      - KAFKA_REPLICA_FETCH_MAX_BYTES:1048576
+      - KAFKA_ZOOKEEPER_CONNECT:'zookeeper0:2181,zookeeper1:2181,zookeeper2:2181'
+      - KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE:false
+    depends_on:
+      - zookeeper0
+      - zookeeper1
+      - zookeeper2
+    deploy:
+      placement:
+        constraints: [node.labels.host==6]
+      replicas: 1
+
+  orderer0:
+    image: hyperledger/fabric-orderer
+    networks:
+      - outside
+    hostname: "orderer0.daotech.io"
+    volumes:
+      - /data/fabric/crypto-config/ordererOrganizations/daotech.io/orderers/orderer0.daotech.io/msp:/var/hyperledger/orderer/msp
+      - /data/fabric/channel-artifacts/daotechio-genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - /data/fabric/crypto-config/ordererOrganizations/daotech.io/orderers/orderer0.daotech.io/tls:/var/hyperledger/orderer/tls
+      - /data/fabric/orderer0:/var/hyperledger/production
+    environment:
+      - ORDERER_GENERAL_LOGLEVEL:debug
+      - ORDERER_GENERAL_LISTENADDRESS:0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD:file
+      - ORDERER_GENERAL_GENESISFILE:/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID:OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR:/var/hyperledger/orderer/msp
+      - ORDERER_GENERAL_TLS_ENABLED:true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY:/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE:/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS:"[/var/hyperledger/orderer/tls/ca.crt]"
+      - ORDERER_KAFKA_BROKERS:[kafka0:9092,kafka1:9092,kafka2:9092,kafka3:9092]
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: ["orderer"]
+    depends_on:
+      - zookeeper0
+      - zookeeper1
+      - zookeeper2
+      - kafka0
+      - kafka1
+      - kafka2
+      - kafka3
+    deploy:
+      placement:
+        constraints: [node.labels.host==3]
+      replicas: 1
+
+  orderer1:
+    image: hyperledger/fabric-orderer
+    networks:
+      - outside
+    hostname: "orderer1.daotech.io"
+    volumes:
+      - /data/fabric/crypto-config/ordererOrganizations/daotech.io/orderers/orderer1.daotech.io/msp:/var/hyperledger/orderer/msp
+      - /data/fabric/channel-artifacts/daotechio-genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - /data/fabric/crypto-config/ordererOrganizations/daotech.io/orderers/orderer1.daotech.io/tls:/var/hyperledger/orderer/tls
+      - /data/fabric/orderer1:/var/hyperledger/production
+    environment:
+      - ORDERER_GENERAL_LOGLEVEL:debug
+      - ORDERER_GENERAL_LISTENADDRESS:0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD:file
+      - ORDERER_GENERAL_GENESISFILE:/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID:OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR:/var/hyperledger/orderer/msp
+      - ORDERER_GENERAL_TLS_ENABLED:true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY:/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE:/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS:"[/var/hyperledger/orderer/tls/ca.crt]"
+      - ORDERER_KAFKA_BROKERS:[kafka0:9092,kafka1:9092,kafka2:9092,kafka3:9092]
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: ["orderer"]
+    depends_on:
+      - zookeeper0
+      - zookeeper1
+      - zookeeper2
+      - kafka0
+      - kafka1
+      - kafka2
+      - kafka3
+    deploy:
+      placement:
+        constraints: [node.labels.host==4]
+      replicas: 1
+
+  orderer2:
+    image: hyperledger/fabric-orderer
+    networks:
+      - outside
+    hostname: "orderer2.daotech.io"
+    volumes:
+      - /data/fabric/crypto-config/ordererOrganizations/daotech.io/orderers/orderer2.daotech.io/msp:/var/hyperledger/orderer/msp
+      - /data/fabric/channel-artifacts/daotechio-genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - /data/fabric/crypto-config/ordererOrganizations/daotech.io/orderers/orderer2.daotech.io/tls:/var/hyperledger/orderer/tls
+      - /data/fabric/orderer2:/var/hyperledger/production
+    environment:
+      - ORDERER_GENERAL_LOGLEVEL:debug
+      - ORDERER_GENERAL_LISTENADDRESS:0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD:file
+      - ORDERER_GENERAL_GENESISFILE:/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID:OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR:/var/hyperledger/orderer/msp
+      - ORDERER_GENERAL_TLS_ENABLED:true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY:/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE:/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS:"[/var/hyperledger/orderer/tls/ca.crt]"
+      - ORDERER_KAFKA_BROKERS:[kafka0:9092,kafka1:9092,kafka2:9092,kafka3:9092]
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: ["orderer"]
+    depends_on:
+      - zookeeper0
+      - zookeeper1
+      - zookeeper2
+      - kafka0
+      - kafka1
+      - kafka2
+      - kafka3
+    deploy:
+      placement:
+        constraints: [node.labels.host==5]
+      replicas: 1
+
+  org1-peer0:
+    image: hyperledger/fabric-peer
+    networks:
+      - outside
+    hostname: "peer0.org1.daotech.io"
+    volumes:
+      - /data/fabric/crypto-config/peerOrganizations/org1.daotech.io/peers/peer0.org1.daotech.io/msp:/etc/hyperledger/fabric/msp
+      - /data/fabric/crypto-config/peerOrganizations/org1.daotech.io/peers/peer0.org1.daotech.io/tls:/etc/hyperledger/fabric/tls
+      - /var/run:/host/var/run
+      - /data/fabric/org1/peer0:/var/hyperledger/production
+    environment:
+      - CORE_LOGGING_LEVEL:debug
+      - CORE_PEER_ADDRESS:peer0.org1.daotech.io:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT:10.0.1.198:7051
+      - CORE_VM_DOCKER_HOSTCONFIG_EXTRAHOSTS:peer0.org1.daotech.io:10.0.1.198
+      - CORE_PEER_GOSSIP_ORGLEADER:"false"
+      - CORE_PEER_GOSSIP_USELEADERELECTION:"true"
+      - CORE_PEER_ID:peer0.org1.daotech.io
+      - CORE_PEER_LOCALMSPID:Org1MSP
+      - CORE_PEER_PROFILE_ENABLED:"true"
+      - CORE_PEER_TLS_CERT_FILE:/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_ENABLED:"true"
+      - CORE_PEER_TLS_KEY_FILE:/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE:/etc/hyperledger/fabric/tls/ca.crt
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE:host
+      - CORE_VM_ENDPOINT:unix:///host/var/run/docker.sock
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: ["peer", "node", "start"]
+    depends_on:
+      - zookeeper0
+      - zookeeper1
+      - zookeeper2
+      - kafka0
+      - kafka1
+      - kafka2
+      - kafka3
+      - orderer0
+      - orderer1
+      - orderer2
+    deploy:
+      placement:
+        constraints: [node.labels.host==3]
+      replicas: 1
+
+networks:
+  outside:
+    external:
+      name: "host"
