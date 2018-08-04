@@ -3,6 +3,8 @@
 - General key architecture
 <img src="../imgs/bitcoin_keys.png">
 
+> Picture credit > http://www.righto.com/2014/02/bitcoins-hard-way-using-raw-bitcoin.html
+
 - Create an Elliptic Curve key-pair based on ```secp256k1``` curves.
 
 ```shell
