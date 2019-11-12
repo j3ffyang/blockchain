@@ -42,19 +42,20 @@ ASN1 OID: secp256k1
 
 - Hash the public key using ```SHA256``` followed by ```RIPEMD-160```
 
+```shell
 [jeff@f28 tmp]$ openssl ec -in /tmp/ec-keypair.pem -pubout -outform DER | tail -c 65 | sha256sum | xxd -r -p | openssl rmd160
 read EC key
 writing EC key
 (stdin)= 327d2921de28063206940d79c7aa2b4896e79737
-
+```
 
 - Compute the Checksum
 
+```shell
 [jeff@f28 tmp]$ echo -n "**00**327d2921de28063206940d79c7aa2b4896e79737" | xxd -r -p | sha256sum | xxd -r -p | sha256sum
 **7b8ddc4c**165ed9240788545e569f74aea710197956ac4a2e8b33ef3778304397  -
 
 [jeff@f28 tmp]$ b58encode 00327d2921de28063206940d79c7aa2b4896e79737**7b8ddc4c**
-```shell
 33GNRFw1NiwXy3HXTDemx8UCUqanxJgUK
 ```
 

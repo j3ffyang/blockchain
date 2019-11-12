@@ -1,6 +1,6 @@
 #### Download Screenshot
 
-```
+```bash
 jeff@debian:~/Downloads/scratch/instguid.git$ curl -sSL https://raw.githubusercontent.com/hyperledger/fabric/master/scripts/bootstrap.sh | bash -s -- 1.4.0
 bash: line 181: [: too many arguments
 

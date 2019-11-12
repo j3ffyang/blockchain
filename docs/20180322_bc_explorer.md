@@ -28,7 +28,7 @@ Reference: [https://github.com/hyperledger/blockchain-explorer](https://github.c
 
 - Copy SQL script into docker
 
-  ```
+  ```bash
   docker cp ~/work/blockchain-explorer/db/fabricexplorer.sql \
     mysql-bcexplorer:/var/lib/mysql/
   ```
